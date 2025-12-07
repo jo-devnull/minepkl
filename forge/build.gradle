@@ -35,7 +35,7 @@ dependencies {
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionForge')
-    modImplementation "maven.modrinth:moonlight:1.20-2.16.16-forge"
+    modImplementation "maven.modrinth:moonlight:${rootProject.moonlightlib_version}-forge"
 
     forgeRuntimeLibrary(include('org.pkl-lang:pkl-core:0.30.1'))
     forgeRuntimeLibrary(include('org.pkl-lang:pkl-parser:0.30.1'))

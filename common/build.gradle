@@ -7,15 +7,15 @@ dependencies {
     // which get remapped to the correct annotations on each platform.
     // Do NOT use other classes from Fabric Loader.
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
-    modImplementation "maven.modrinth:moonlight:1.20-2.16.16-fabric"
+    modImplementation "maven.modrinth:moonlight:${rootProject.moonlightlib_version}-fabric"
 
-    implementation('org.pkl-lang:pkl-core:0.30.1')
-    implementation('org.pkl-lang:pkl-parser:0.30.1')
-    implementation('org.graalvm.polyglot:polyglot:25.0.0')
-    implementation('org.graalvm.sdk:collections:25.0.0')
-    implementation('org.graalvm.sdk:graal-sdk:25.0.0')
-    implementation('org.graalvm.sdk:nativeimage:25.0.0')
-    implementation('org.graalvm.sdk:word:25.0.0')
-    implementation('org.graalvm.truffle:truffle-api:25.0.0')
-    implementation('org.organicdesign:Paguro:3.10.3')
+    implementation("org.pkl-lang:pkl-core:${rootProject.pkl_version}")
+    implementation("org.pkl-lang:pkl-parser:${rootProject.pkl_version}")
+    implementation("org.graalvm.polyglot:polyglot:${rootProject.graalvm_sdk_version}")
+    implementation("org.graalvm.sdk:collections:${rootProject.graalvm_sdk_version}")
+    implementation("org.graalvm.sdk:graal-sdk:${rootProject.graalvm_sdk_version}")
+    implementation("org.graalvm.sdk:nativeimage:${rootProject.graalvm_sdk_version}")
+    implementation("org.graalvm.sdk:word:${rootProject.graalvm_sdk_version}")
+    implementation("org.graalvm.truffle:truffle-api:${rootProject.graalvm_sdk_version}")
+    implementation("org.organicdesign:Paguro:${rootProject.paguro_version}")
 }
