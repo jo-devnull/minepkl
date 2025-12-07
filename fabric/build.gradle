@@ -1,0 +1,61 @@
+plugins {
+    id 'com.github.johnrengelman.shadow'
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+
+    // Files in this configuration will be bundled into your mod using the Shadow plugin.
+    // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+    modImplementation "maven.modrinth:moonlight:1.20-2.16.16-fabric"
+
+    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
+    shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+
+    include implementation('org.pkl-lang:pkl-core:0.30.1')
+    include implementation('org.pkl-lang:pkl-parser:0.30.1')
+    include implementation('org.graalvm.polyglot:polyglot:25.0.0')
+    include implementation('org.graalvm.sdk:collections:25.0.0')
+    include implementation('org.graalvm.sdk:graal-sdk:25.0.0')
+    include implementation('org.graalvm.sdk:nativeimage:25.0.0')
+    include implementation('org.graalvm.sdk:word:25.0.0')
+    include implementation('org.graalvm.truffle:truffle-api:25.0.0')
+    include implementation('org.organicdesign:Paguro:3.10.3')
+}
+
+processResources {
+    inputs.property 'version', project.version
+
+    filesMatching('fabric.mod.json') {
+        expand version: project.version
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+}

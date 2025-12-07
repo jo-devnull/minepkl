@@ -1,0 +1,36 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+#issueTrackerURL = ""
+license = "All Rights Reserved"
+
+[[mods]]
+modId = "minepkl"
+version = "${version}"
+displayName = "Minepkl"
+authors = ""
+description = '''
+
+'''
+#logoFile = ""
+
+[[dependencies.minepkl]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.minepkl]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.minepkl]]
+modId = "moonlight"
+mandatory = true
+versionRange = "[1.20-2.16.16,)"
+ordering = "NONE"
+side = "BOTH"
+

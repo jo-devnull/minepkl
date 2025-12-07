@@ -1,0 +1,17 @@
+// See: https://pkl-lang.org/main/current/language-reference/index.html#module-output
+output {
+  files {
+    // External resources (eg, config files) can also be generated
+    // Paths are relative to the minecraft instance and cannot be absolute
+    ["config/my_config.yml"] {
+      value {
+        some_field = "A property"
+        hello = "world"
+        number = 3.14
+      }
+
+      // Define the output type of the file, in this case we use YAML
+      renderer = new YamlRenderer {}
+    }
+  }
+}
