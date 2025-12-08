@@ -1,9 +1,8 @@
 package github.jodevnull.minepkl;
 
 import github.jodevnull.minepkl.core.PklEvaluator;
-import github.jodevnull.minepkl.core.resources.DynClientResources;
-import github.jodevnull.minepkl.core.resources.DynServerResources;
 import github.jodevnull.minepkl.core.resources.ExternalResources;
+import github.jodevnull.minepkl.core.resources.PackGenerator;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
@@ -16,8 +15,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 public final class Minepkl
@@ -31,13 +28,9 @@ public final class Minepkl
 
     public static void init() {
         PklEvaluator.init();
-        DynClientResources.init();
-        DynServerResources.init();
-
-        PlatHelper.addCommonSetup(() -> {
-            Minepkl.writeDefaultFiles();
-            ExternalResources.generateExternalFiles();
-        });
+        Minepkl.writeDefaultFiles();
+        PackGenerator.generatePack();
+        ExternalResources.generateExternalFiles();
     }
 
     public static void writeDefaultFiles() {

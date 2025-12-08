@@ -12,6 +12,12 @@ public class Options
     public static final String DATA     = "data.pkl";
     public static final String EXTERNAL = "external.pkl";
 
+    public static final String PACK_OUTPUT = "resourcepacks/minepkl@generated.zip";
+
+    public static Path getOutputZipFile() {
+        return Path.of(PlatHelper.getGamePath() + "/" + PACK_OUTPUT);
+    }
+
     public static Path getMainDir() {
         return Path.of(PlatHelper.getGamePath() + "/" + MAIN_DIR);
     }

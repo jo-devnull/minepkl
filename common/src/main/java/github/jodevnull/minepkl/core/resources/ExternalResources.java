@@ -7,6 +7,7 @@ import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ExternalResources
@@ -15,14 +16,14 @@ public class ExternalResources
         File directory = new File(PlatHelper.getGamePath().toUri());
 
         for (var entry : PklEvaluator.getExternal().entrySet()) {
-            File file = new File(entry.getKey());
+            File file = new File(PlatHelper.getGamePath() + "/" + entry.getKey());
 
             if (entry.getKey().endsWith(File.separator)) {
                 Minepkl.LOGGER.error("Path cannot be a directory: {}", entry.getKey());
                 continue;
             }
 
-            if (file.isAbsolute()) {
+            if (Path.of(entry.getKey()).isAbsolute()) {
                 Minepkl.LOGGER.error("Cannot generate file with absolute path: {}", entry.getKey());
                 continue;
             }

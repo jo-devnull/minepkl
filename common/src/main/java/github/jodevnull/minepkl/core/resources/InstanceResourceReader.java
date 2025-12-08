@@ -1,6 +1,7 @@
-package github.jodevnull.minepkl.core;
+package github.jodevnull.minepkl.core.resources;
 
 import github.jodevnull.minepkl.Minepkl;
+import github.jodevnull.minepkl.core.PathUtils;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import org.pkl.core.SecurityManagerException;
