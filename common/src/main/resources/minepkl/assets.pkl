@@ -6,17 +6,13 @@ assets {
   }
 }
 
-// Since most of Minecraft resources are written in JSON, we
-// use the JsonRenderer provided by the pkl stdlib
-const jsonRenderer = new JsonRenderer {}
-
 // See: https://pkl-lang.org/main/current/language-reference/index.html#module-output
 output {
   files {
     for (location, contents in assets) {
       [location] {
         value = contents
-        renderer = jsonRenderer
+        renderer = new JsonRenderer {} // because minecraft expects JSON files
       }
     }
   }

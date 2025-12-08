@@ -7,7 +7,7 @@ output {
       value {
         some_field = "A property"
         hello = "world"
-        number = 3.14
+        number = 2 * 3.14
       }
 
       // Define the output type of the file, in this case we use YAML
