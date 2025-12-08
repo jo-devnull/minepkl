@@ -31,10 +31,9 @@ public class PklEvaluator
     public static void init() {}
 
     private static Evaluator buildEvaluator() {
-        return EvaluatorBuilder
+        var builder = EvaluatorBuilder
             .unconfigured()
             .setStackFrameTransformer(StackFrameTransformers.defaultTransformer)
-            .setRootDir(PlatHelper.getGamePath())
             .setAllowedModules(allowedModules)
             .setAllowedResources(allowedResources)
             .addResourceReader(InstanceResourceReader.INSTANCE)
@@ -45,8 +44,12 @@ public class PklEvaluator
             .addModuleKeyFactory(ModuleKeyFactories.projectpackage)
             .addModuleKeyFactory(ModuleKeyFactories.genericUrl)
             // Since minecraft expects json files for
-            .setOutputFormat(OutputFormat.JSON)
-            .build();
+            .setOutputFormat(OutputFormat.JSON);
+
+        if (Options.getUseRootDir())
+            builder.setRootDir(PlatHelper.getGamePath());
+
+        return builder.build();
     }
 
     public static Map<String, String> getAssets() {

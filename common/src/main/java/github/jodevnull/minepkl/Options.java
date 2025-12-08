@@ -27,4 +27,8 @@ public class Options
     public static Path getExternalPath() {
         return Path.of(getMainDir() + "/" + EXTERNAL);
     }
+
+    public static boolean getUseRootDir() {
+        return System.getProperty("minepkl.rootdir", "true").equals("true");
+    }
 }
