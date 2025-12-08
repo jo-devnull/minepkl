@@ -32,6 +32,7 @@ public class DynServerResources
         @Override
         public void regenerateDynamicAssets(Consumer<ResourceGenTask> executor)
         {
+            ExternalResources.generateExternalFiles();
             executor.accept(ServerAssetsGenerator::genPklData);
         }
 
@@ -39,7 +40,7 @@ public class DynServerResources
         {
             for (var entry : Minepkl.getData().entrySet()) {
                 String path = entry.getKey();
-                FileOutput file = entry.getValue();
+                String contents = entry.getValue();
 
                 if (!ResourceLocation.isValidResourceLocation(path)) {
                     Minepkl.LOGGER.error("Invalid location: '{}' -- Skipping...", path);
@@ -47,7 +48,7 @@ public class DynServerResources
                 }
 
                 ResourceLocation location = new ResourceLocation(path);
-                JsonElement output = JsonParser.parseString(file.getText());
+                JsonElement output = JsonParser.parseString(contents);
                 sink.addJson(location, output, ResType.JSON);
                 Minepkl.LOGGER.info("[Pkl:data] generated '{}'", location);
             }

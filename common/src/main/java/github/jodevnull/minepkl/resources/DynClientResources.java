@@ -39,8 +39,7 @@ public class DynClientResources
         {
             for (var entry : Minepkl.getAssets().entrySet()) {
                 String path = entry.getKey();
-                FileOutput file = entry.getValue();
-
+                String contents = entry.getValue();
 
                 if (!ResourceLocation.isValidResourceLocation(path)) {
                     Minepkl.LOGGER.error("Invalid location: '{}' -- Skipping...", path);
@@ -48,7 +47,7 @@ public class DynClientResources
                 }
 
                 ResourceLocation location = new ResourceLocation(path);
-                JsonElement output = JsonParser.parseString(file.getText());
+                JsonElement output = JsonParser.parseString(contents);
                 sink.addJson(location, output, ResType.JSON);
                 Minepkl.LOGGER.info("[Pkl:asset] generated '{}'", location);
             }

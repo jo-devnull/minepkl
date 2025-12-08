@@ -2,6 +2,7 @@ package github.jodevnull.minepkl;
 
 import github.jodevnull.minepkl.resources.DynClientResources;
 import github.jodevnull.minepkl.resources.DynServerResources;
+import github.jodevnull.minepkl.resources.ExternalResources;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
@@ -24,10 +25,6 @@ public final class Minepkl
     public static final String MOD_ID = "minepkl";
     public static final Logger LOGGER = LogManager.getLogger();
 
-    private static final Evaluator EVALUATOR = EvaluatorBuilder
-        .preconfigured()
-        .build();
-
     private static final Path PKL_DIR = Path.of(PlatHelper.getGamePath() + File.separator + "pkl");
 
     public static ResourceLocation res(String path) {
@@ -38,8 +35,10 @@ public final class Minepkl
         DynClientResources.init();
         DynServerResources.init();
 
-        PlatHelper.addCommonSetup(Minepkl::writeDefaultFiles);
-        PlatHelper.addCommonSetup(Minepkl::generateExternalFiles);
+        PlatHelper.addCommonSetup(() -> {
+            Minepkl.writeDefaultFiles();
+            ExternalResources.generateExternalFiles();
+        });
     }
 
     public static void writeDefaultFiles() {
@@ -89,74 +88,34 @@ public final class Minepkl
         return Optional.empty();
     }
 
-    public static Map<String, FileOutput> getAssets() {
+    public static Map<String, String> getAssets() {
         // TODO: Make this configurable
         return getPklOutput("pkl/asset.pkl");
     }
 
-    public static Map<String, FileOutput> getData() {
+    public static Map<String, String> getData() {
         // TODO: Make this configurable
         return getPklOutput("pkl/data.pkl");
     }
 
-    public static Map<String, FileOutput> getExternal() {
+    public static Map<String, String> getExternal() {
         // TODO: Make this configurable
         return getPklOutput("pkl/external.pkl");
     }
 
-    public static Map<String, FileOutput> getPklOutput(String pklFilePath) {
-        try {
+    public static Map<String, String> getPklOutput(String pklFilePath) {
+        HashMap<String, String> output = new HashMap<>();
+
+        try (Evaluator evaluator = Evaluator.preconfigured()) {
             ModuleSource source = ModuleSource.file(PlatHelper.getGamePath() + File.separator + pklFilePath);
-            return EVALUATOR.evaluateOutputFiles(source);
+
+            for (var entry : evaluator.evaluateOutputFiles(source).entrySet())
+                output.put(entry.getKey(), entry.getValue().getText());
         } catch (Exception e) {
             LOGGER.error("Exception while running {} (No files generated)", pklFilePath);
             LOGGER.error(e);
-            return new HashMap<>();
         }
-    }
 
-    public static void generateExternalFiles() {
-        File directory = new File(PlatHelper.getGamePath().toUri());
-
-        for (var entry : getExternal().entrySet()) {
-            File file = new File(entry.getKey());
-
-            if (entry.getKey().endsWith(File.separator)) {
-                LOGGER.error("Path cannot be a directory: {}", entry.getKey());
-                continue;
-            }
-
-            if (file.isAbsolute()) {
-                LOGGER.error("Cannot generate file with absolute path: {}", entry.getKey());
-                continue;
-            }
-
-            try {
-                String fileCanonicalPath = file.getCanonicalPath();
-                String directoryCanonicalPath = directory.getCanonicalPath();
-
-                // Ensure the directory path ends with a separator for accurate comparison
-                if (!directoryCanonicalPath.endsWith(File.separator))
-                    directoryCanonicalPath += File.separator;
-
-                if (!fileCanonicalPath.startsWith(directoryCanonicalPath)) {
-                    LOGGER.error("Path outside of instance directory: {}", entry.getKey());
-                    continue;
-                }
-
-                File output = new File(PlatHelper.getGamePath() + File.separator + entry.getKey());
-
-                if (output.exists()) {
-                    LOGGER.warn("File '{}' already exists, ignoring...", file.getPath());
-                    continue;
-                }
-
-                Files.createDirectories(Paths.get(output.getParent()));
-                Files.write(output.toPath(), entry.getValue().getBytes());
-                LOGGER.info("[pkl:external] file writen to {}", output.toPath());
-            } catch (IOException e) {
-                LOGGER.error("Exception generating external file: {}", entry.getKey());
-            }
-        }
+        return output;
     }
 }
