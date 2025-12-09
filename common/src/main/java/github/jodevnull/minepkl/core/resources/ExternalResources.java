@@ -6,6 +6,7 @@ import github.jodevnull.minepkl.core.PathUtils;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,7 +39,7 @@ public class ExternalResources
 
                 // TODO: Make this configurable
                 Files.createDirectories(Paths.get(output.getParent()));
-                Files.write(output.toPath(), entry.getValue().getBytes());
+                Files.write(output.toPath(), entry.getValue().getBytes(StandardCharsets.UTF_8));
                 Minepkl.LOGGER.info("[pkl:external] file writen to {}", output.toPath());
             } catch (Exception e) {
                 Minepkl.LOGGER.error("Exception generating external file: {}", entry.getKey());

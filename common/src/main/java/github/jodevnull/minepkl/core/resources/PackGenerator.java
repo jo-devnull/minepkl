@@ -5,6 +5,7 @@ import github.jodevnull.minepkl.Options;
 import github.jodevnull.minepkl.core.PklEvaluator;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -50,7 +51,7 @@ public class PackGenerator
 
                 ZipEntry zipEntry = new ZipEntry(filePath);
                 zos.putNextEntry(zipEntry);
-                zos.write(content.getBytes());
+                zos.write(content.getBytes(StandardCharsets.UTF_8));
                 zos.closeEntry();
             }
         } catch (IOException e) {
