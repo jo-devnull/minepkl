@@ -1,13 +1,14 @@
 package github.jodevnull.minepkl;
 
 import github.jodevnull.minepkl.core.PklEvaluator;
-import github.jodevnull.minepkl.core.resources.ExternalResources;
-import github.jodevnull.minepkl.core.resources.PackGenerator;
 import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.pkl.core.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,8 +30,7 @@ public final class Minepkl
     public static void init() {
         PklEvaluator.init();
         Minepkl.writeDefaultFiles();
-        PackGenerator.generatePack();
-        ExternalResources.generateExternalFiles();
+        Options.load();
     }
 
     public static void writeDefaultFiles() {
@@ -44,6 +44,7 @@ public final class Minepkl
         writeSourceFile("/minepkl/data.pkl", Options.getDataPath());
         writeSourceFile("/minepkl/assets.pkl", Options.getAssetsPath());
         writeSourceFile("/minepkl/external.pkl", Options.getExternalPath());
+        writeSourceFile("/minepkl/pack.json", Options.getConfigFilePath());
     }
 
     public static void writeSourceFile(String source, Path output) {
@@ -80,5 +81,14 @@ public final class Minepkl
 
     public static String getRelative(Path absolutePath) {
         return absolutePath.toString().replace(PlatHelper.getGamePath().toString(), "");
+    }
+
+    public static void logError(ServerPlayer player, String msg, Object ...arguments)  {
+        if (player != null) {
+            MutableComponent component = Component.literal(msg.formatted(arguments))
+                .withStyle(style -> style.withColor(ChatFormatting.RED));
+
+            player.sendSystemMessage(component);
+        }
     }
 }

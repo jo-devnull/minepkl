@@ -24,12 +24,17 @@ public class PackGenerator
             }""";
 
     public static void generatePack() {
+        PklEvaluator.setError(null);
         Path outputZipPath = Options.getOutputZipFile();
 
         Stream<Map.Entry<String, String>> outputFiles = Stream.concat(
             PklEvaluator.getData().entrySet().stream(),
             PklEvaluator.getAssets().entrySet().stream()
         );
+
+        if (PklEvaluator.hasError()) {
+            return;
+        }
 
         try {
             if (Files.exists(outputZipPath)) Files.delete(outputZipPath);
@@ -40,7 +45,7 @@ public class PackGenerator
         try (ZipOutputStream zos = new ZipOutputStream(Files.newOutputStream(outputZipPath))) {
             Files.createDirectories(outputZipPath.getParent());
 
-            ZipEntry mcmeta = new ZipEntry("pack.mcmeta");
+            ZipEntry mcmeta = new ZipEntry("pack.json");
             zos.putNextEntry(mcmeta);
             zos.write(META.getBytes());
             zos.closeEntry();

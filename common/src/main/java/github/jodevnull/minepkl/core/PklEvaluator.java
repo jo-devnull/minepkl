@@ -18,6 +18,20 @@ import static github.jodevnull.minepkl.Minepkl.getRelative;
 
 public class PklEvaluator
 {
+    private static Exception ERROR = null;
+
+    public static Exception getError() {
+        return ERROR;
+    }
+
+    public static void setError(Exception val) {
+        ERROR = val;
+    }
+
+    public static boolean hasError() {
+        return ERROR != null;
+    }
+
     public static final List<Pattern> allowedModules = List.of(
         Pattern.compile("file:"),
         Pattern.compile("https:"),
@@ -92,6 +106,7 @@ public class PklEvaluator
         } catch (Exception e) {
             LOGGER.error("Exception while running '{}' (No files generated)", getRelative(module));
             LOGGER.error(e);
+            setError(e);
         }
 
         return output;
