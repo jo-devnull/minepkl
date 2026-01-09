@@ -26,7 +26,7 @@ public class MixinReloadCommand
 
         if (PklEvaluator.hasError()) {
             Minepkl.logError(commandSourceStack.getPlayer(), "[pkl] Error generating files:");
-            Minepkl.logError(commandSourceStack.getPlayer(), "%s", PklEvaluator.getError());
+            Minepkl.logError(commandSourceStack.getPlayer(), "%s", PklEvaluator.popError());
         }
     }
 }

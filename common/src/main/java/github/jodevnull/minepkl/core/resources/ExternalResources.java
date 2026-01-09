@@ -20,18 +20,18 @@ public class ExternalResources
             File file = new File(PlatHelper.getGamePath() + "/" + entry.getKey());
 
             if (entry.getKey().endsWith(File.separator)) {
-                Minepkl.LOGGER.error("Path cannot be a directory: {}", entry.getKey());
+                Minepkl.setErrorAndLog("Path cannot be a directory: %s", entry.getKey());
                 continue;
-            }
+        }
 
             if (Path.of(entry.getKey()).isAbsolute()) {
-                Minepkl.LOGGER.error("Cannot generate file with absolute path: {}", entry.getKey());
+                Minepkl.setErrorAndLog("Cannot generate file with absolute path: %s", entry.getKey());
                 continue;
             }
 
             try {
                 if (!PathUtils.isInsideOf(directory, file)) {
-                    Minepkl.LOGGER.error("Path outside of instance directory: {}", entry.getKey());
+                    Minepkl.setErrorAndLog("Path outside of instance directory: %s", entry.getKey());
                     continue;
                 }
 
@@ -42,8 +42,7 @@ public class ExternalResources
                 Files.write(output.toPath(), entry.getValue().getBytes(StandardCharsets.UTF_8));
                 Minepkl.LOGGER.info("[pkl:external] file writen to {}", output.toPath());
             } catch (Exception e) {
-                Minepkl.LOGGER.error("Exception generating external file: {}", entry.getKey());
-                Minepkl.LOGGER.error(e);
+                Minepkl.setErrorAndLog("Exception generating external file: %s\n%s", entry.getKey(), e);
             }
         }
     }

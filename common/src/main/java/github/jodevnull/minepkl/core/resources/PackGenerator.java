@@ -24,7 +24,6 @@ public class PackGenerator
             }""";
 
     public static void generatePack() {
-        PklEvaluator.setError(null);
         Path outputZipPath = Options.getOutputZipFile();
 
         Stream<Map.Entry<String, String>> outputFiles = Stream.concat(
@@ -45,7 +44,7 @@ public class PackGenerator
         try (ZipOutputStream zos = new ZipOutputStream(Files.newOutputStream(outputZipPath))) {
             Files.createDirectories(outputZipPath.getParent());
 
-            ZipEntry mcmeta = new ZipEntry("pack.json");
+            ZipEntry mcmeta = new ZipEntry("pack.mcmeta");
             zos.putNextEntry(mcmeta);
             zos.write(META.getBytes());
             zos.closeEntry();
@@ -62,6 +61,7 @@ public class PackGenerator
         } catch (IOException e) {
             Minepkl.LOGGER.error("Failed to create output zip file:");
             Minepkl.LOGGER.error(e);
+            PklEvaluator.pushError(e);
         }
     }
 }

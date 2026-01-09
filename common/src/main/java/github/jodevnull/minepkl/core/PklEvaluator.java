@@ -20,11 +20,13 @@ public class PklEvaluator
 {
     private static Exception ERROR = null;
 
-    public static Exception getError() {
-        return ERROR;
+    public static Exception popError() {
+        Exception err = ERROR;
+        ERROR = null;
+        return err;
     }
 
-    public static void setError(Exception val) {
+    public static void pushError(Exception val) {
         ERROR = val;
     }
 
@@ -106,7 +108,7 @@ public class PklEvaluator
         } catch (Exception e) {
             LOGGER.error("Exception while running '{}' (No files generated)", getRelative(module));
             LOGGER.error(e);
-            setError(e);
+            pushError(e);
         }
 
         return output;

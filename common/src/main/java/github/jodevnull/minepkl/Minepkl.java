@@ -83,6 +83,12 @@ public final class Minepkl
         return absolutePath.toString().replace(PlatHelper.getGamePath().toString(), "");
     }
 
+    public static void setErrorAndLog(String msg, Object ...arguments) {
+        String errMessage = msg.formatted(arguments);
+        PklEvaluator.pushError(new Exception(errMessage));
+        LOGGER.error(errMessage);
+    }
+
     public static void logError(ServerPlayer player, String msg, Object ...arguments)  {
         if (player != null) {
             MutableComponent component = Component.literal(msg.formatted(arguments))
