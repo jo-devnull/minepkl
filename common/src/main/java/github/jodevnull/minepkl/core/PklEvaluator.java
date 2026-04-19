@@ -1,20 +1,16 @@
 package github.jodevnull.minepkl.core;
 
+import github.jodevnull.minepkl.Minepkl;
 import github.jodevnull.minepkl.Options;
-import github.jodevnull.minepkl.core.resources.InstanceResourceReader;
-import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
-import net.minecraft.resources.ResourceLocation;
+import github.jodevnull.minepkl.core.reader.InstanceResourceReader;
 import org.pkl.core.*;
 import org.pkl.core.module.ModuleKeyFactories;
 
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
-import static github.jodevnull.minepkl.Minepkl.LOGGER;
-import static github.jodevnull.minepkl.Minepkl.getRelative;
+import static github.jodevnull.minepkl.Minepkl.*;
 
 public class PklEvaluator
 {
@@ -35,6 +31,7 @@ public class PklEvaluator
     }
 
     public static final List<Pattern> allowedModules = List.of(
+        Pattern.compile("repl:"),
         Pattern.compile("file:"),
         Pattern.compile("https:"),
         Pattern.compile("pkl:"),
@@ -65,50 +62,47 @@ public class PklEvaluator
             .setOutputFormat(OutputFormat.JSON);
 
         if (Options.getUseRootDir())
-            builder.setRootDir(PlatHelper.getGamePath());
+            builder.setRootDir(Minepkl.PLATFORM.getGameDir());
 
         return builder.build();
     }
 
-    public static Map<String, String> getAssets() {
-        return getFileOutputs(Options.getAssetsPath(), false, "assets");
+    public static void onError(Exception e, Path module) {
+        LOGGER.error("Exception while running '{}' (No files generated)", getRelative(module));
+        LOGGER.error(e);
+        pushError(e);
     }
 
-    public static Map<String, String> getData() {
-        return getFileOutputs(Options.getDataPath(), false, "data");
-    }
-
-    public static Map<String, String> getExternal() {
-        return getFileOutputs(Options.getExternalPath(), true, "");
-    }
-
-    public static Map<String, String> getFileOutputs(Path module, boolean isExternal, String type) {
+    public static Map<String, String> buildExternal() {
+        Path module = Options.getExternalPath();
         HashMap<String, String> output = new HashMap<>();
 
         try (Evaluator evaluator = buildEvaluator()) {
-            ModuleSource source = ModuleSource.file(module.toString());
+            ModuleSource source = ModuleSource.path(Options.getExternalPath());
+
             for (var entry : evaluator.evaluateOutputFiles(source).entrySet()) {
                 String path = entry.getKey();
-
-                if (isExternal) {
-                    output.put(entry.getKey(), entry.getValue().getText());
-                } else {
-                    if (!ResourceLocation.isValidResourceLocation(path)) {
-                        LOGGER.error("Invalid resource location: {}", path);
-                        continue;
-                    }
-
-                    ResourceLocation location = new ResourceLocation(path);
-                    String finalPath = "%s/%s/%s.json".formatted(type, location.getNamespace(), location.getPath());
-                    output.put(finalPath, entry.getValue().getText());
-                }
-
-                LOGGER.info("[pkl:{}] generating file '{}'", type, path);
+                output.put(entry.getKey(), entry.getValue().getText());
+                LOGGER.info("[pkl:{}] generating file '{}'", "external", path);
             }
         } catch (Exception e) {
-            LOGGER.error("Exception while running '{}' (No files generated)", getRelative(module));
-            LOGGER.error(e);
-            pushError(e);
+            onError(e, module);
+        }
+
+        return output;
+    }
+
+    public static HashMap<String, String> buildPack(Path modulePath) {
+        HashMap<String, String> output = new HashMap<>();
+
+        try (Evaluator evaluator = buildEvaluator()) {
+            ModuleSource source = ModuleSource.path(Options.getGeneratorFilePath());
+            Map<String, FileOutput> files = evaluator.evaluateOutputFiles(source);
+
+            for (var entry : files.entrySet())
+                output.put(entry.getKey(), entry.getValue().getText());
+        } catch (Exception e) {
+            onError(e, modulePath);
         }
 
         return output;

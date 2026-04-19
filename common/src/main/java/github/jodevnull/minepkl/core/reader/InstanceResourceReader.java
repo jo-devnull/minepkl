@@ -1,8 +1,7 @@
-package github.jodevnull.minepkl.core.resources;
+package github.jodevnull.minepkl.core.reader;
 
 import github.jodevnull.minepkl.Minepkl;
 import github.jodevnull.minepkl.core.PathUtils;
-import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import org.pkl.core.SecurityManagerException;
 import org.pkl.core.externalreader.ExternalReaderProcessException;
@@ -35,9 +34,9 @@ public final class InstanceResourceReader implements ResourceReader {
             return Optional.empty();
         }
 
-        Path filepath = Path.of(PlatHelper.getGamePath() + File.separator + uri.getSchemeSpecificPart()).normalize();
+        Path filepath = Path.of(Minepkl.PLATFORM.getGameDir() + File.separator + uri.getSchemeSpecificPart()).normalize();
 
-        if (!PathUtils.isInsideOf(PlatHelper.getGamePath(), filepath)) {
+        if (!PathUtils.isInsideOf(Minepkl.PLATFORM.getGameDir(), filepath)) {
             Minepkl.LOGGER.error("Attempted to read file outside of minecraft instance: '{}'", filepath);
             return Optional.empty();
         }

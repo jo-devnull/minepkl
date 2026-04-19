@@ -3,8 +3,7 @@ package github.jodevnull.minepkl.mixin;
 import github.jodevnull.minepkl.Minepkl;
 import github.jodevnull.minepkl.Options;
 import github.jodevnull.minepkl.core.PklEvaluator;
-import github.jodevnull.minepkl.core.resources.ExternalResources;
-import github.jodevnull.minepkl.core.resources.PackGenerator;
+import github.jodevnull.minepkl.core.PackGenerator;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.commands.ReloadCommand;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +21,7 @@ public class MixinReloadCommand
         Minepkl.LOGGER.info("Generating minepkl resources...");
         Options.load();
         PackGenerator.generatePack();
-        ExternalResources.generateExternalFiles();
+        PackGenerator.generateExternalFiles();
 
         if (PklEvaluator.hasError()) {
             Minepkl.logError(commandSourceStack.getPlayer(), "[pkl] Error generating files:");

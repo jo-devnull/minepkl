@@ -1,0 +1,29 @@
+// Simple object that hold our assets
+myAssets {
+  ["minecraft:lang/en_us"] {
+    ["item.minecraft.apple"] = "Not an apple"
+  }
+}
+
+// Simple object to hold our data files
+myData {
+  ["minecraft:recipes/my_custom_recipe"] {
+    type = "minecraft:crafting_shapeless"
+    ingredients {
+      new { item = "minecraft:apple" }
+      new { item = "minecraft:stick" }
+    }
+    result {
+      item = "minecraft:diamond"
+    }
+  }
+}
+
+// Here we define our resource packs
+packs {
+  ["Modpack Resources"] {
+    data = myData
+    assets = myAssets
+    description = "Primary resources for the modpack"
+  }
+}

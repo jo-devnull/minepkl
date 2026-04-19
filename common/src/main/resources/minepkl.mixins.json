@@ -3,8 +3,7 @@
   "package": "github.jodevnull.minepkl.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
-  "client": [
-  ],
+  "client": [],
   "mixins": [
     "MixinReloadCommand"
   ],

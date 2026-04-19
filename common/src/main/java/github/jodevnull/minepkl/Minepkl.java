@@ -1,7 +1,7 @@
 package github.jodevnull.minepkl;
 
+import github.jodevnull.minepkl.core.PackGenerator;
 import github.jodevnull.minepkl.core.PklEvaluator;
-import net.mehvahdjukaar.moonlight.api.platform.PlatHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -23,28 +23,35 @@ public final class Minepkl
     public static final String MOD_ID = "minepkl";
     public static final Logger LOGGER = LogManager.getLogger();
 
+    public static Platform PLATFORM;
+
     public static ResourceLocation res(String path) {
         return new ResourceLocation(MOD_ID + ":" + path);
+    }
+
+    public static void setPlatform(Platform platform) {
+        PLATFORM = platform;
     }
 
     public static void init() {
         PklEvaluator.init();
         Minepkl.writeDefaultFiles();
         Options.load();
+        PackGenerator.generate();
     }
 
     public static void writeDefaultFiles() {
         try {
             Files.createDirectories(Options.getMainDir());
+            Files.createDirectories(Path.of(Options.getConfigDir() + "/generated"));
         } catch (IOException e) {
             LOGGER.error("Failed to create '{}/' directory", Options.MAIN_DIR);
             return;
         }
 
-        writeSourceFile("/minepkl/data.pkl", Options.getDataPath());
-        writeSourceFile("/minepkl/assets.pkl", Options.getAssetsPath());
+        writeSourceFile("/minepkl/build.pkl", Options.getBuildFilePath());
         writeSourceFile("/minepkl/external.pkl", Options.getExternalPath());
-        writeSourceFile("/minepkl/pack.json", Options.getConfigFilePath());
+        writeSourceFile("/minepkl/generator.pkl", Options.getGeneratorFilePath());
     }
 
     public static void writeSourceFile(String source, Path output) {
@@ -80,7 +87,7 @@ public final class Minepkl
     }
 
     public static String getRelative(Path absolutePath) {
-        return absolutePath.toString().replace(PlatHelper.getGamePath().toString(), "");
+        return absolutePath.toString().replace(PLATFORM.getGameDir().toString(), "");
     }
 
     public static void setErrorAndLog(String msg, Object ...arguments) {
