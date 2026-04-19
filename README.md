@@ -21,6 +21,9 @@ datapacks for my modpack.
 
 ## Usage
 
+> See [here](https://github.com/jo-devnull/insomnia/tree/main/minepkl)
+for a concrete example on how to use this mod.
+
 > In this section, i'll assume you have a basic understanding on how to use pkl.
 
 After installing, once you boot up minecraft, a directory called `pkl`
@@ -44,7 +47,7 @@ description: String
 
 Beware of the types. The generator requires the fields `data` and
 `assets` to be a `Mapping` with `String` keys, where each key is a
-`ResourceLocation` (e.g, `minecraft:recipes/my_recipe`). 
+`ResourceLocation` (e.g, `minecraft:recipes/my_recipe`).
 
 ### Defining a new pack
 
@@ -127,4 +130,3 @@ to learn how to use Module Outputs.
 - `/reload`: Use the normal `reload` command to automatically regenerate your packs.
 - ``/minepkl build``: build all files (packs and external)
 - ``/minepkl build <type>``: build a specific type (all, packs only or external files only)
-
