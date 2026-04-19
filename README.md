@@ -6,8 +6,6 @@ modpack devs to generate minecraft datapacks and resourcepacks using pkl.
 
 Current supported version is `1.20.1` on Forge and Fabric.
 
-Needs [Moonlight Lib](https://modrinth.com/mod/moonlight) as a dependency.
-
 > Note: this mod is in early development and many features are missing,
 > but a basic prototype is working. Expect bugs and many changes.
 
@@ -28,104 +26,108 @@ datapacks for my modpack.
 After installing, once you boot up minecraft, a directory called `pkl`
 should be created in the root of your minecraft instance with 3 files:
 
-- `data.pkl` - for server resources, such as recipes, tags, etc;
-- `asset.pkl` - for client resources, such as lang files;
+- `build.pkl` - here is where you define the resourcepacks (data, assets) you want to generate;
 - `external.pkl` - Can be used to generate files anywhere inside the
 minecraft instance.
 
-### Generating assets
+### Pack Definition
 
-Inside of `pkl/asset.pkl` you can define any asset that should
-be added to the output resourcepack. For example:
+Inside of `minepkl/build.pkl`, define `packs` as a map where each *key*
+is the file name of the pack. The pack object itself is defined with 3
+properties:
 
 ```pkl
-assets {
-  ["mymod:lang/en_us"] {
-    ["item.mymod.some_item"] = "My custom item name"
-    ["item.mymod.another_item"] = "I don't know anymore"
+// All server resources are defined here (optional)
+data: Mapping<String, Any>
+// All client resources are defined here (optional)
+assets: Mapping<String, Any>
+// This is the description of the pack (optional)
+description: String
+```
+
+Beware of the types. The generator requires the fields `data` and
+`assets` to be a `Mapping` with `String` keys, where each key is a
+`ResourceLocation` (e.g, `minecraft:recipes/my_recipe`). 
+
+### Defining a new pack
+
+Let's define a simple pack with a single recipe and translation:
+
+```pkl
+/// inside minepkl/build.pkl
+
+myAssets {
+  ["minecraft:lang/en_us"] {
+    ["item.minecraft.apple"] = "Not an Apple!"
   }
 }
 
-output {
-  files {
-    for (location, contents in assets) {
-      [location] {
-        value = contents
-        renderer = new JsonRenderer {}
-      }
-    }
-  }
-}
-```
-
-- We define an `assets` map with one field `mymod:lang/en_us`, which is the
-path (minecraft resource location notation) of the output file and the
-value of that file (will be converted to JSON).
-
-- Then, using the pkl `output.files` property of a module, we define an output
-file for each key-value pair inside `assets`.
-
-- We use `JsonRenderer` since minecraft expects a JSON file.
-
-In this case, the output file will be located at
-`<generated_pack>/assets/mymod/lang/en_us.json` with the following contents:
-
-```json
-{
-  "item.mymod.some_item": "My custom item name",
-  "item.mymod.another_item": "I don't know anymore"
-}
-```
-
-### Generating data
-
-Inside of `pkl/data.pkl` you can define any files that should be
-added to the generated datapack. For example, with a simple *create* recipe:
-
-```pkl
-data {
-  ["my_mod:recipes/my_custom_recipe"] {
+myRecipes {
+  ["minecraft:recipes/my_custom_recipe"] {
     type = "create:mixing"
     heatRequirement = "heated"
-    
+
     ingredients {
       new { fluid = "minecraft:water" amount = 250 }
       new { item = "minecraft:oxidized_copper" }
     }
-    
+
     results {
       new { item = "minecraft:copper_block" }
     }
   }
 }
 
+/// Define our packs
+packs {
+  ["Custom Datapack"] {
+    data = myRecipes
+    assets = myAssets
+    description = "Simple Datapack"
+  }
+}
+```
+
+After running ``/reload`` and looking at `config/minepkl/generated`
+we see there is a new file called ``Custom Datapack.zip``. If you
+open it and look at it you'll see all the files you defined converted
+to JSON.
+
+### Generating External files
+
+You can use ``minepkl/external.pkl`` to generated any file inside your minecraft
+instance folder. For example:
+
+```pkl
+/// Inside minepkl/external.pkl
+
 output {
   files {
-    for (location, contents in data) {
-      [location] {
-        value = contents
-        renderer = new JsonRenderer {}
+    // External resources (eg, config files) can also be generated
+    // Paths are relative to the minecraft instance and cannot be absolute
+    ["config/my_config.yml"] {
+      value {
+        some_field = "A property"
+        hello = "world"
+        number = 2 * 3.14
       }
+
+      // Define the output type of the file, in this case we use YAML
+      renderer = new YamlRenderer {}
     }
   }
 }
 ```
 
-The output file will be located at `<generated_pack>/data/my_mod/recipes/my_custom_recipe.json`
-and the contents will be:
+If you run ``/minepkl build external`` you'll see there is a file
+``config/my_config.yml`` generated.
 
-```json
-{
-  "type": "create:mixing",
-  "heatRequirement": "heated",
-  
-  "ingredients": [
-    { "fluid": "minecraft:water", "amount": 250 },
-    { "item": "minecraft:oxidized_copper" }
-  ],
-  
-  "results": [
-    { "item": "minecraft:copper_block" }
-  ]
-}
-```
+You may need to take a look at [here](https://pkl-lang.org/main/current/language-reference/index.html#module-output)
+to learn how to use Module Outputs.
+
+### Commands
+
+- `/reload`: Use the normal `reload` command to automatically regenerate your packs.
+- ``/minepkl build``: build all files (packs and external)
+- ``/minepkl build <type>``: build a specific type (all, packs only or external files only)
+
