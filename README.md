@@ -37,11 +37,8 @@ is the file name of the pack. The pack object itself is defined with 3
 properties:
 
 ```pkl
-// All server resources are defined here (optional)
 data: Mapping<String, Any>
-// All client resources are defined here (optional)
 assets: Mapping<String, Any>
-// This is the description of the pack (optional)
 description: String
 ```
 
