@@ -83,7 +83,7 @@ public class PklEvaluator
             for (var entry : evaluator.evaluateOutputFiles(source).entrySet()) {
                 String path = entry.getKey();
                 output.put(entry.getKey(), entry.getValue().getText());
-                LOGGER.info("[pkl:{}] generating file '{}'", "external", path);
+                LOGGER.info("[pkl] generating external file '{}'", path);
             }
         } catch (Exception e) {
             onError(e, module);
@@ -99,8 +99,10 @@ public class PklEvaluator
             ModuleSource source = ModuleSource.path(Options.getGeneratorFilePath());
             Map<String, FileOutput> files = evaluator.evaluateOutputFiles(source);
 
-            for (var entry : files.entrySet())
+            for (var entry : files.entrySet()) {
                 output.put(entry.getKey(), entry.getValue().getText());
+                LOGGER.info("[pkl] generating file '{}'", entry.getKey());
+            }
         } catch (Exception e) {
             onError(e, modulePath);
         }

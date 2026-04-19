@@ -28,6 +28,14 @@ public class PackGenerator
             return;
         }
 
+        File generatedDir = new File(Options.getConfigDir() + "/generated");
+
+        if (generatedDir.isDirectory()) {
+            for (File file : Objects.requireNonNull(generatedDir.listFiles())) {
+                if (!file.delete()) Minepkl.LOGGER.error("Failed to delete '{}'", file.getPath());
+            }
+        } else Minepkl.LOGGER.error("'{}' is not a directory!", generatedDir.getPath());
+
         for (var entry : outputFiles.entrySet()) {
             Path path = Path.of(entry.getKey());
             outputPacks.add(path.getName(0).toString());
