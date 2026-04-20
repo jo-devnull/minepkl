@@ -1,7 +1,7 @@
 package github.jodevnull.minepkl;
 
-import github.jodevnull.minepkl.core.PackGenerator;
-import github.jodevnull.minepkl.core.PklEvaluator;
+import github.jodevnull.minepkl.pack.PackGenerator;
+import github.jodevnull.minepkl.pkl.MinepklEvaluator;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -33,8 +33,12 @@ public final class Minepkl
         PLATFORM = platform;
     }
 
+    public static Platform getPlatform() {
+        return PLATFORM;
+    }
+
     public static void init() {
-        PklEvaluator.init();
+        MinepklEvaluator.init();
         Minepkl.writeDefaultFiles();
         Options.load();
         PackGenerator.generate();
@@ -92,7 +96,7 @@ public final class Minepkl
 
     public static void setErrorAndLog(String msg, Object ...arguments) {
         String errMessage = msg.formatted(arguments);
-        PklEvaluator.pushError(new Exception(errMessage));
+        MinepklEvaluator.pushError(new Exception(errMessage));
         LOGGER.error(errMessage);
     }
 

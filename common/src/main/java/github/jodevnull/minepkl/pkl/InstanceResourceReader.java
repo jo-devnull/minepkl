@@ -1,7 +1,7 @@
-package github.jodevnull.minepkl.core.reader;
+package github.jodevnull.minepkl.pkl;
 
 import github.jodevnull.minepkl.Minepkl;
-import github.jodevnull.minepkl.core.PathUtils;
+import github.jodevnull.minepkl.pack.PathUtils;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import org.pkl.core.SecurityManagerException;
 import org.pkl.core.externalreader.ExternalReaderProcessException;

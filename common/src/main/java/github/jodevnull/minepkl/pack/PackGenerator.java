@@ -1,7 +1,8 @@
-package github.jodevnull.minepkl.core;
+package github.jodevnull.minepkl.pack;
 
 import github.jodevnull.minepkl.Minepkl;
 import github.jodevnull.minepkl.Options;
+import github.jodevnull.minepkl.pkl.MinepklEvaluator;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,10 +22,10 @@ public class PackGenerator
     }
 
     public static void generatePack() {
-        HashMap<String, String> outputFiles = PklEvaluator.buildPack(Options.getBuildFilePath());
+        HashMap<String, String> outputFiles = MinepklEvaluator.buildPack(Options.getBuildFilePath());
         HashSet<String> outputPacks = new HashSet<>();
 
-        if (PklEvaluator.hasError()) {
+        if (MinepklEvaluator.hasError()) {
             return;
         }
 
@@ -70,7 +71,7 @@ public class PackGenerator
             } catch (IOException e) {
                 Minepkl.LOGGER.error("Failed to create output zip file for {}:", packfile);
                 Minepkl.LOGGER.error(e);
-                PklEvaluator.pushError(e);
+                MinepklEvaluator.pushError(e);
             }
         }
     }
@@ -78,7 +79,7 @@ public class PackGenerator
     public static void generateExternalFiles() {
         File directory = new File(Minepkl.PLATFORM.getGameDir().toUri());
 
-        for (var entry : PklEvaluator.buildExternal().entrySet()) {
+        for (var entry : MinepklEvaluator.buildExternal().entrySet()) {
             File file = new File(Minepkl.PLATFORM.getGameDir() + "/" + entry.getKey());
 
             if (entry.getKey().endsWith(File.separator)) {

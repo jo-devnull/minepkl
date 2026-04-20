@@ -1,6 +1,6 @@
 package github.jodevnull.minepkl.fabric.mixin;
 
-import github.jodevnull.minepkl.core.pack.MinepklPackRepository;
+import github.jodevnull.minepkl.pack.MinepklPackRepository;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.RepositorySource;

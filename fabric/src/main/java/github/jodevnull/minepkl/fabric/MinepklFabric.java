@@ -2,7 +2,7 @@ package github.jodevnull.minepkl.fabric;
 
 import github.jodevnull.minepkl.Minepkl;
 import github.jodevnull.minepkl.Platform;
-import github.jodevnull.minepkl.core.command.MinepklCommands;
+import github.jodevnull.minepkl.cmd.MinepklCommands;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 

@@ -1,10 +1,10 @@
-package github.jodevnull.minepkl.core.command;
+package github.jodevnull.minepkl.cmd;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import github.jodevnull.minepkl.Minepkl;
-import github.jodevnull.minepkl.core.PackGenerator;
-import github.jodevnull.minepkl.core.PklEvaluator;
+import github.jodevnull.minepkl.pack.PackGenerator;
+import github.jodevnull.minepkl.pkl.MinepklEvaluator;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -37,9 +37,9 @@ public class MinepklCommands
             case External: PackGenerator.generateExternalFiles(); break;
         }
 
-        if (PklEvaluator.hasError()) {
+        if (MinepklEvaluator.hasError()) {
             Minepkl.logError(context.getSource().getPlayer(), "[pkl] Error generating files:");
-            Minepkl.logError(context.getSource().getPlayer(), "%s", PklEvaluator.popError());
+            Minepkl.logError(context.getSource().getPlayer(), "%s", MinepklEvaluator.popError());
             return 0;
         }
 

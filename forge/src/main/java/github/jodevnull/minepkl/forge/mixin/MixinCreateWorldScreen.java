@@ -1,6 +1,6 @@
 package github.jodevnull.minepkl.forge.mixin;
 
-import github.jodevnull.minepkl.core.pack.MinepklPackRepository;
+import github.jodevnull.minepkl.pack.MinepklPackRepository;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.RepositorySource;

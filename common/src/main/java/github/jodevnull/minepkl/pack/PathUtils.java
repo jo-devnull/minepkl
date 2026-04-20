@@ -1,4 +1,4 @@
-package github.jodevnull.minepkl.core;
+package github.jodevnull.minepkl.pack;
 
 import java.io.File;
 import java.io.IOException;

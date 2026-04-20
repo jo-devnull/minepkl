@@ -1,4 +1,4 @@
-package github.jodevnull.minepkl.core.pack;
+package github.jodevnull.minepkl.pack;
 
 import github.jodevnull.minepkl.Minepkl;
 import net.minecraft.ChatFormatting;
@@ -39,7 +39,7 @@ public class MinepklPackRepository implements RepositorySource
         for (File file : Objects.requireNonNull(sourceDir.listFiles())) {
             if (file.getName().endsWith(".zip")) {
                 final String packName = file.getName();
-                final Component displayName = Component.literal(packName);
+                final Component displayName = Component.literal("[pkl] " + packName);
                 final Pack pack = Pack.readMetaAndCreate(packName, displayName, true, createPackSupplier(file), this.packType, Pack.Position.TOP, this.sourceInfo);
 
                 if (pack != null) {

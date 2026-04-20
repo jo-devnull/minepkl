@@ -2,7 +2,7 @@ package github.jodevnull.minepkl.forge;
 
 import github.jodevnull.minepkl.Minepkl;
 import github.jodevnull.minepkl.Platform;
-import github.jodevnull.minepkl.core.command.MinepklCommands;
+import github.jodevnull.minepkl.cmd.MinepklCommands;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.fml.common.Mod;

@@ -1,9 +1,9 @@
-package github.jodevnull.minepkl.core;
+package github.jodevnull.minepkl.pkl;
 
 import github.jodevnull.minepkl.Minepkl;
 import github.jodevnull.minepkl.Options;
-import github.jodevnull.minepkl.core.reader.InstanceResourceReader;
 import org.pkl.core.*;
+import org.pkl.core.http.HttpClient;
 import org.pkl.core.module.ModuleKeyFactories;
 
 import java.nio.file.Path;
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 import static github.jodevnull.minepkl.Minepkl.*;
 
-public class PklEvaluator
+public class MinepklEvaluator
 {
     private static Exception ERROR = null;
 
@@ -31,12 +31,8 @@ public class PklEvaluator
     }
 
     public static final List<Pattern> allowedModules = List.of(
-        Pattern.compile("repl:"),
         Pattern.compile("file:"),
-        Pattern.compile("https:"),
-        Pattern.compile("pkl:"),
-        Pattern.compile("package:"),
-        Pattern.compile("projectpackage:")
+        Pattern.compile("pkl:")
     );
 
     public static final List<Pattern> allowedResources = List.of(
@@ -48,16 +44,14 @@ public class PklEvaluator
     private static Evaluator buildEvaluator() {
         var builder = EvaluatorBuilder
             .unconfigured()
+            // This is to prevent pkl scripts to download external files or connect to the internet in any way
+            .setHttpClient(HttpClient.dummyClient())
             .setStackFrameTransformer(StackFrameTransformers.defaultTransformer)
             .setAllowedModules(allowedModules)
             .setAllowedResources(allowedResources)
             .addResourceReader(InstanceResourceReader.INSTANCE)
             .addModuleKeyFactory(ModuleKeyFactories.standardLibrary)
             .addModuleKeyFactory(ModuleKeyFactories.file)
-            .addModuleKeyFactory(ModuleKeyFactories.http)
-            .addModuleKeyFactory(ModuleKeyFactories.pkg)
-            .addModuleKeyFactory(ModuleKeyFactories.projectpackage)
-            .addModuleKeyFactory(ModuleKeyFactories.genericUrl)
             // Since minecraft expects json files for
             .setOutputFormat(OutputFormat.JSON);
 

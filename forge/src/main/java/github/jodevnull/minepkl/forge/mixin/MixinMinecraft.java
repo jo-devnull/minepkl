@@ -1,6 +1,6 @@
 package github.jodevnull.minepkl.forge.mixin;
 
-import github.jodevnull.minepkl.core.pack.MinepklPackRepository;
+import github.jodevnull.minepkl.pack.MinepklPackRepository;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.RepositorySource;

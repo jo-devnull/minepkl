@@ -1,0 +1,5 @@
+@ModuleInfo { minPklVersion = "0.30.1" }
+module pkl.minecraft
+
+external function isModLoaded(String modId): Boolean
+external function getModList(): List<String>
