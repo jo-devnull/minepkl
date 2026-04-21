@@ -1,5 +1,6 @@
 package github.jodevnull.minepkl;
 
+import github.jodevnull.minepkl.pack.MinepklPackRepository;
 import github.jodevnull.minepkl.pack.PackGenerator;
 import github.jodevnull.minepkl.pkl.MinepklEvaluator;
 import net.minecraft.ChatFormatting;
@@ -7,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.PackType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +25,17 @@ public final class Minepkl
     public static final String MOD_ID = "minepkl";
     public static final Logger LOGGER = LogManager.getLogger();
 
+    private static Optional<MinepklPackRepository> SERVER_REPOSITORY = Optional.empty();
+    private static Optional<MinepklPackRepository> CLIENT_REPOSITORY = Optional.empty();
+
     public static Platform PLATFORM;
+
+    public static void init() {
+        MinepklEvaluator.init();
+        Minepkl.writeDefaultFiles();
+        Options.load();
+        PackGenerator.generate();
+    }
 
     public static ResourceLocation res(String path) {
         return new ResourceLocation(MOD_ID + ":" + path);
@@ -37,11 +49,20 @@ public final class Minepkl
         return PLATFORM;
     }
 
-    public static void init() {
-        MinepklEvaluator.init();
-        Minepkl.writeDefaultFiles();
-        Options.load();
-        PackGenerator.generate();
+    public static MinepklPackRepository serverRepository(Path gameDir) {
+        if (SERVER_REPOSITORY.isEmpty()) {
+            SERVER_REPOSITORY = Optional.of(new MinepklPackRepository(PackType.SERVER_DATA, gameDir));
+        }
+
+        return SERVER_REPOSITORY.orElseThrow();
+    }
+
+    public static MinepklPackRepository clientRepository(Path gameDir) {
+        if (CLIENT_REPOSITORY.isEmpty()) {
+            CLIENT_REPOSITORY = Optional.of(new MinepklPackRepository(PackType.CLIENT_RESOURCES, gameDir));
+        }
+
+        return CLIENT_REPOSITORY.orElseThrow();
     }
 
     public static void writeDefaultFiles() {
@@ -55,7 +76,6 @@ public final class Minepkl
 
         writeSourceFile("/minepkl/build.pkl", Options.getBuildFilePath());
         writeSourceFile("/minepkl/external.pkl", Options.getExternalPath());
-        writeSourceFile("/minepkl/generator.pkl", Options.getGeneratorFilePath());
     }
 
     public static void writeSourceFile(String source, Path output) {

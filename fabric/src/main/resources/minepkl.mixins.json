@@ -3,12 +3,9 @@
   "package": "github.jodevnull.minepkl.fabric.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
-  "client": [
-    "MixinCreateWorldScreen",
-    "MixinMinecraft"
-  ],
+  "client": [],
   "mixins": [
-    "MixinServerPacksSources"
+    "MixinModResourcePackCreator"
   ],
   "injectors": {
     "defaultRequire": 1
