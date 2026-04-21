@@ -1,15 +1,15 @@
 modLoader = "javafml"
 loaderVersion = "[2,)"
-#issueTrackerURL = ""
+issueTrackerURL = "https://github.com/jo-devnull/minepkl/issues"
 license = "MIT"
 
 [[mods]]
 modId = "minepkl"
 version = "${version}"
 displayName = "Minepkl"
-authors = ""
+authors = "jo-devnull"
 description = '''
-
+Tool for modpack developers to generate minecraft resources using the Pkl language.
 '''
 #logoFile = ""
 
