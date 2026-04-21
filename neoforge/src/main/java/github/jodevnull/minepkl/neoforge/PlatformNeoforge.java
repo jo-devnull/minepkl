@@ -1,15 +1,14 @@
-package github.jodevnull.minepkl.forge;
+package github.jodevnull.minepkl.neoforge;
 
 import github.jodevnull.minepkl.Platform;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge.forgespi.language.IModInfo;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforgespi.language.IModInfo;
 
 import java.nio.file.Path;
 import java.util.List;
 
-public class PlatformForge implements Platform
+public class PlatformNeoforge implements Platform
 {
     @Override
     public Path getGameDir() {
