@@ -31,6 +31,7 @@ public class MinepklEvaluator
     }
 
     public static final List<Pattern> allowedModules = List.of(
+        Pattern.compile("minepkl:"),
         Pattern.compile("file:"),
         Pattern.compile("pkl:")
     );
@@ -50,6 +51,7 @@ public class MinepklEvaluator
             .setAllowedModules(allowedModules)
             .setAllowedResources(allowedResources)
             .addResourceReader(InstanceResourceReader.INSTANCE)
+            .addModuleKeyFactory(MinepklModuleFile.INSTANCE)
             .addModuleKeyFactory(ModuleKeyFactories.standardLibrary)
             .addModuleKeyFactory(ModuleKeyFactories.file)
             // Since minecraft expects json files for
@@ -90,7 +92,7 @@ public class MinepklEvaluator
         HashMap<String, String> output = new HashMap<>();
 
         try (Evaluator evaluator = buildEvaluator()) {
-            ModuleSource source = ModuleSource.path(Options.getGeneratorFilePath());
+            ModuleSource source = ModuleSource.uri("minepkl:@generator");
             Map<String, FileOutput> files = evaluator.evaluateOutputFiles(source);
 
             for (var entry : files.entrySet()) {
