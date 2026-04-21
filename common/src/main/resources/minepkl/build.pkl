@@ -21,9 +21,9 @@ myData {
 
 // Here we define our resource packs
 packs {
-  ["Modpack Resources"] {
-    data = myData
-    assets = myAssets
-    description = "Primary resources for the modpack"
-  }
+  // ["Modpack Resources"] {
+  //   data = myData
+  //   assets = myAssets
+  //   description = "Primary resources for the modpack"
+  // }
 }

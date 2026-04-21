@@ -23,16 +23,16 @@ function mapresources(source, type, map) = new Mapping<String, FileOutput> {
 
 function mcmeta(respack) = new {
   pack {
-    pack_format = 15
-    description = respack.description ?? "Generated resources"
+    pack_format = 48
+    description = respack.getPropertyOrNull("description") ?? "Generated resources"
   }
 }
 
 output {
   files {
     for (source, pack in build.packs) {
-      ...mapresources(source, "data", pack.data ?? Map())
-      ...mapresources(source, "assets", pack.assets ?? Map())
+      ...mapresources(source, "data", pack.getPropertyOrNull("data") ?? Map())
+      ...mapresources(source, "assets", pack.getPropertyOrNull("assets") ?? Map())
 
       ["\(source)/pack.mcmeta"] {
         value = mcmeta(pack)
