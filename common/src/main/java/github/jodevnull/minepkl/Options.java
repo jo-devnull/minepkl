@@ -10,36 +10,10 @@ public class Options
     public static final String EXTERNAL = "external.pkl";
     public static final String CONFIG   = "pack.json";
 
-    // private static JsonObject config = new JsonObject();
-
-    public static void load() {
-        // File configfile = new File(getConfigFilePath().toUri());
-        //
-        // if (configfile.exists()) {
-        //     Gson gson = new Gson();
-        //
-        //     try {
-        //         config = gson.fromJson(Files.readString(configfile.toPath()), JsonObject.class);
-        //     } catch (IOException e) {
-        //         Minepkl.LOGGER.error("Error loading minepkl/pack.json:", e);
-        //     }
-        // }
-    }
+    public static void load() {}
 
     public static Path getOutputZipFile(String name) {
         Path outputFile = Path.of("config/minepkl/generated/" + name + ".zip");
-
-        // if (config.has("outputFile")) {
-        //     var output = config.get("outputFile").getAsJsonObject();
-        //
-        //     if (output.has(name)) {
-        //         outputFile = Path.of(output.get(name).getAsString());
-        //     }
-        // }
-        //
-        // if (outputFile.isAbsolute())
-        //     return outputFile;
-
         return Path.of(Minepkl.PLATFORM.getGameDir() + "/" + outputFile);
     }
 

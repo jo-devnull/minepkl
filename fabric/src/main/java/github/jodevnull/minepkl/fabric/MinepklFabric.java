@@ -7,7 +7,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 
 public final class MinepklFabric implements ModInitializer {
-    static final Platform platform = new PlatformFabric();
+    public static final Platform platform = new PlatformFabric();
 
     static {
         Minepkl.setPlatform(platform);
