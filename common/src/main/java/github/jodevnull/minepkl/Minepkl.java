@@ -76,6 +76,7 @@ public final class Minepkl
 
         writeSourceFile("/minepkl/build.pkl", Options.getBuildFilePath());
         writeSourceFile("/minepkl/external.pkl", Options.getExternalPath());
+        writeSourceFile("/minepkl/generator.pkl", Options.getGeneratorFilePath());
     }
 
     public static void writeSourceFile(String source, Path output) {
